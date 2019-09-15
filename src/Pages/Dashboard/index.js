@@ -1,11 +1,11 @@
 import React, {Fragment} from 'react';
-import {Route} from 'react-router-dom';
-
-// Layout
+import {Route, BrowserRouter as Router} from 'react-router-dom';
 
 import AppHeader from '../../Layout/AppHeader/';
 import AppSidebar from '../../Layout/AppSidebar/';
 import AppFooter from '../../Layout/AppFooter/';
+
+import ServicesElement from './Services/index';
 
 const Dashboard = ({match}) => (
     <Fragment>
@@ -14,7 +14,7 @@ const Dashboard = ({match}) => (
             <AppSidebar/>
             <div className="app-main__outer">
                 <div className="app-main__inner">
-                    <h1>HOLA MUNDO</h1>
+                    <Route path={`${match.path}/services`} component={ServicesElement}/>
                 </div>
             </div>
         </div>

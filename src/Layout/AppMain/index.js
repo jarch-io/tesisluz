@@ -40,7 +40,7 @@ const AppMain = () => {
                     </div>
                 </div>
             }>
-                <Route path="/" component={Dashboard}/>
+                <Route path="/dashboard" component={Dashboard}/>
             </Suspense>
             
             <ToastContainer/>
