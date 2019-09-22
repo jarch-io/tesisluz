@@ -52,9 +52,6 @@ class MyRequests extends React.Component {
 				</td>
 				<td>
 					<div>
-						<ul>
-							<li>Hola</li>
-						</ul>
 					</div>
 				</td>
 				<td><div className={['badge', request.status ? 'badge-success' : 'badge-danger'].join(' ')}>{request.status ? 'Activo' : 'Inactivo'}</div></td>
