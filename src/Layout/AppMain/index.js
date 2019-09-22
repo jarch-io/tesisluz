@@ -7,6 +7,7 @@ import {
 
 const Login = lazy(() => import('../../Pages/Auth'));
 const Dashboard = lazy(() => import('../../Pages/Dashboard'));
+const Customer = lazy(() => import('../../Pages/Customer'));
 
 const AppMain = () => {
 
@@ -30,6 +31,7 @@ const AppMain = () => {
             </Suspense>
 
             {/*Login*/}
+
             <Suspense fallback={
                 <div className="loader-container">
                     <div className="loader-container-inner">
@@ -41,6 +43,19 @@ const AppMain = () => {
                 </div>
             }>
                 <Route path="/dashboard" component={Dashboard}/>
+            </Suspense>
+
+            <Suspense fallback={
+                <div className="loader-container">
+                    <div className="loader-container-inner">
+                        <h6 className="mt-5">
+                            Please wait while we load all the Login
+                            <small>Because this is a demonstration we load at once all the Forms examples. This wouldn't happen in a real live app!</small>
+                        </h6>
+                    </div>
+                </div>
+            }>
+                <Route path="/" component={Customer}/>
             </Suspense>
             
             <ToastContainer/>

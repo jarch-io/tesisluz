@@ -36,3 +36,16 @@ export const ReportsNav = [
         ],
     }
 ];
+
+export const RequestsNav = [
+    {
+        icon: 'pe-7s-graph1',
+        label: 'Request',
+        content: [
+            {
+                label: 'List',
+                to: '#/dashboard/requests/list',
+            }
+        ],
+    }
+];
