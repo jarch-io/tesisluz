@@ -7,6 +7,8 @@ import ReactCSSTransitionGroup from 'react-addons-css-transition-group';
 
 import HeaderLogo from '../AppLogo';
 
+import CartBox from './CartBox';
+
 class Header extends React.Component {
     render() {
         let {
@@ -27,6 +29,18 @@ class Header extends React.Component {
                     transitionLeave={false}>
 
                     <HeaderLogo />
+
+                    <div className={cx(
+                        "app-header__content",
+                        {'header-mobile-open': enableMobileMenuSmall},
+                    )}>
+                        <div className="app-header-left">
+                            {/*<SearchBox/>*/}
+                        </div>
+                        <div className="app-header-right">
+                            {<CartBox />}
+                        </div>
+                    </div>
                 </ReactCSSTransitionGroup>
             </Fragment>
         );
