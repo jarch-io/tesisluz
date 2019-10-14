@@ -6,16 +6,20 @@ function getById(requestId) {
 			.then(res => res.request);
 }
 
-function find(terms) {
-	return API.get(`requests`, terms)
+function find(params) {
+	return API.get(`requests`, {
+		params : {
+			query : params
+		}
+	})
 			.then(res => res.data)
-			.then(res => res.request);
+			.then(res => res.requests);
 }
 
-function create(request) {
-	return API.post(`requests`, JSON.stringify({request : request}))
+function assign(requestId, adviser) {
+	return API.put(`requests/${requestId}/assigns`, {adviser : adviser})
 			.then(res => res.data)
-			.then(res => res.request);
+			.then(res => res.request)
 }
 
 function addComment(requestId, comment) {
@@ -26,7 +30,7 @@ function addComment(requestId, comment) {
 
 export {
 	getById,
-	create,
 	find,
-	addComment
+	addComment,
+	assign
 };

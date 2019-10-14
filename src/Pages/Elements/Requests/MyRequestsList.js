@@ -1,6 +1,8 @@
 import React, {Fragment} from 'react';
 import { withRouter } from 'react-router-dom';
 
+import {find as requestFind} from '../../../Secure/Request';
+
 import {Table, Media, Button}  from 'reactstrap';
 import {library} from '@fortawesome/fontawesome-svg-core';
 import {faEye} from '@fortawesome/free-solid-svg-icons';
@@ -19,35 +21,35 @@ class MyRequests extends React.Component {
 	}
 
 	componentDidMount() {
-		const requestsList = [
-			{
-				id : 1,
-				customer : {
-					id : 25,
-					firstName : "José",
-					lastName : "Ramos",
-					avatar : "https://icon-library.net/images/person-image-icon/person-image-icon-7.jpg"
-				},
-				status : true
+		requestFind({
+			filter : {
+				adviser : '_ME_',
+				isClosed : false
 			}
-		];
-
-		this.setState({
-			requests : requestsList
+		})
+		.then(requests => {
+			this.setState({
+				requests : requests
+			});
+		})
+		.catch(err => {
+			alert('Ocurrio un error al obtener tu lista de solicitudes.');
 		});
 	}
 
 	viewRequest(id) {
-		this.props.history.push('./' + id + '/view');
+		this.props.history.push(`./${id}/view`);
 	}
 
 	renderItem(request) {
+		const {customer} = request;
+
 		return (
 			<tr>
 				<td>
 					<div>
-						<img width={42} className="rounded-circle" src={request.customer.avatar} alt=""/>
-						&nbsp;{request.customer.firstName + ' ' + request.customer.lastName}
+						<img width={42} className="rounded-circle" src={customer.avatar || ''} alt=""/>
+						&nbsp;{customer.type == 'person' ? customer.firstName + ' ' + customer.lastName : customer.name || customer.brandName}
 					</div>
 				</td>
 				<td>

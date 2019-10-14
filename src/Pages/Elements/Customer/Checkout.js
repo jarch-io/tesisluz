@@ -111,7 +111,7 @@ class Checkout extends React.Component {
 					        <ModalHeader toggle={this.toggle.bind(this)}>Gracias por su solicitud!</ModalHeader>
 					        <ModalBody>
 					        	La solicitud fue creada con éxito, el número de ticket es {this.state.request.code}.<br/>
-					        	{this.state.request.password != '' ? `Se genero la siguiente clave <b>{this.state.request.password}</b>.` : ''}
+					        	{this.state.request.password != '' ? ('Se genero la siguiente clave' + <b>{this.state.request.password}</b>) : ''}
 					        </ModalBody>
 					        <ModalFooter>
 					          <Button color="primary" onClick={this.listServices.bind(this)}>Ver listado de servicios</Button>{' '}
@@ -155,7 +155,7 @@ class Checkout extends React.Component {
 													<Col md={12}>
 														<FormGroup>
 												        	<Label for="namecompany">Razón Social</Label>
-												        	<Input onChange={this.handleChangeInput.bind(this)} type="text" name="nameCompany" id="namecompany" bsSize='sm' />
+												        	<Input onChange={this.handleChangeInput.bind(this)} type="text" name="name" id="namecompany" bsSize='sm' />
 												        </FormGroup>
 													</Col>
 												</Row>

@@ -44,6 +44,10 @@ class CartBox extends React.Component {
         this.props.history.push('checkout');
     }
 
+    goToHome() {
+        this.props.history.push('/');
+    }
+
     render() {
         const {pathname} = this.props.location;
 
@@ -97,7 +101,7 @@ class CartBox extends React.Component {
                                                             </NavLink>
                                                         </NavItem>
                                                         );
-                                                }) : <NavItem><NavLink>Agregue servicios a su carrito</NavLink></NavItem>
+                                                }) : <NavItem><NavLink><Button color="dark" onClick={this.goToHome.bind(this)}>Agregue servicios a su carrito</Button></NavLink></NavItem>
                                             }
                                         </Nav>
                                     </DropdownMenu>
