@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 export default axios.create({
-	baseURL : "http://3.15.116.94/v1/secure/",
+	baseURL : "http://api.luz.localhost/v1/secure/",
 	headers : {
       'Accept' : 'application/json;charset=UTF-8',
       'Content-Type' : 'application/json;charset=UTF-8'
