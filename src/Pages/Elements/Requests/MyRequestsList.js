@@ -65,6 +65,7 @@ class MyRequests extends React.Component {
 	}
 
 	render() {
+		if(!this.state.requests) return "No tienes solicitudes asignadas.";
 		return (
 			<Fragment>
 				<Table dark>

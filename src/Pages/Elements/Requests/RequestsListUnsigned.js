@@ -83,6 +83,8 @@ class RequestListUnsigned extends React.Component {
 	render() {
 		const {requests} = this.state;
 
+		if(!requests) return "No hay solicitudes pendientes.";
+
 		return (
 			<Fragment>
 				{
