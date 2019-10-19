@@ -1,5 +1,11 @@
 import React from 'react';
 
+import { connect } from 'react-redux';
+import { bindActionCreators } from 'redux';
+
+import {fetchAuth as fetchAuthAction} from '../../../Fetchs/Auth';
+import {getUser, getAuthPending, getAuthError, getIsAuthorize} from '../../../reducers/Auth';
+
 import {
     Card, CardTitle, Button, Row, Col, Form, FormGroup, Label, Input
 } from 'reactstrap';
@@ -7,6 +13,14 @@ import {
 class Login extends React.Component {
 	constructor(props) {
 		super(props);
+	}
+
+	login() {
+		const {fetchAuth, history} = this.props;
+
+		fetchAuth(function () {
+			history.push('/dashboard');
+		}.bind(this));
 	}
 
 	render() {
@@ -25,7 +39,7 @@ class Login extends React.Component {
                                 <Input type="password" name="password" id="examplePassword"
                                        placeholder="your pasword"/>
                             </FormGroup>
-                             <Button color="primary">Login</Button>
+                             <Button type="button" onClick={this.login.bind(this)} color="primary">Login</Button>
 		            	</Form>
 		        	</Card>
 				</Col>
@@ -33,4 +47,18 @@ class Login extends React.Component {
 	}
 }
 
-export default Login;
+const mapStateToProps = state => ({
+    error : getAuthError(state),
+    user : getUser(state),
+    isAuthorize : getIsAuthorize(state),
+    pending : getAuthPending(state)
+})
+
+const mapDispatchToProps = dispatch => bindActionCreators({
+    fetchAuth : fetchAuthAction
+}, dispatch)
+
+export default connect(
+		mapStateToProps,
+		mapDispatchToProps
+	)(Login);

@@ -3,12 +3,10 @@ import {Route, BrowserRouter as Router} from 'react-router-dom';
 
 // Forms
 
-import LoginElement from "../Elements/Login/";
+import LoginElement from "../Elements/Login";
 
-const FormsLogin = () => (
-	<Router>
-   		<Route exact path="/login" component={LoginElement} />
-   	</Router>
+const FormsLogin = ({match}) => (
+   	<Route exact path={`${match.path}`} component={LoginElement} />
 );
 
 export default FormsLogin;
