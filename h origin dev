@@ -1,0 +1,65 @@
+[33mcommit e3241118bfcf86ca684d3e99ec017307921db8d7[m[33m ([m[1;36mHEAD -> [m[1;32mdev[m[33m, [m[1;31morigin/master[m[33m, [m[1;32mmaster[m[33m)[m
+Author: Jose Ramos <jramosch@klikealo.com>
+Date:   Sat Oct 19 16:29:25 2019 -0500
+
+    Condicionando el renderizado de cuando no hay solicitudes asignadas y penditenes.
+
+[33mcommit 46181b954c6cef2fe9d5b7d622ce2b2a1030c5a3[m[33m ([m[1;31morigin/dev[m[33m)[m
+Author: Jose Ramos <jramosch@klikealo.com>
+Date:   Sat Oct 19 16:18:55 2019 -0500
+
+    Agregando modulo de login
+
+[33mcommit 9bcd4a5f827d540160bb1df38abdc0d80bf1d5e1[m
+Author: Jose Ramos <jramosch@klikealo.com>
+Date:   Thu Oct 17 00:23:53 2019 -0500
+
+    configuracion para trabajar en localhost
+
+[33mcommit dd2966e5a60ec25be86ad8789cb88d1e23b7f8d7[m
+Author: Jose Ramos <jramosch@klikealo.com>
+Date:   Mon Oct 14 04:18:02 2019 -0500
+
+    Agregando dominios de produccion
+
+[33mcommit f97715ca2c81debf88923148b6993fce510e7ec0[m
+Author: Jose Ramos <jramosch@klikealo.com>
+Date:   Mon Oct 14 00:20:52 2019 -0500
+
+    Control de mensajes y toma de solcitudes
+
+[33mcommit eb988955be56fe13d96c0a5f0fef7358c51bc046[m
+Author: Jose Ramos <jramosch@klikealo.com>
+Date:   Sun Oct 13 09:47:55 2019 -0500
+
+    Agregando carrito y checkout
+
+[33mcommit 2b7b6cd2d95c542de3583b02f75cb69baf3fc78c[m
+Author: Jose Ramos <jramosch@klikealo.com>
+Date:   Sun Sep 22 18:44:47 2019 -0500
+
+    retirando contenido inecesario de la lista de servicios.
+
+[33mcommit 19bad49227ca546c94ebc1fa89428240ce18d16f[m
+Author: Jose Ramos <jramosch@klikealo.com>
+Date:   Sun Sep 22 18:41:38 2019 -0500
+
+    Adicionando vista de interaccion de request
+
+[33mcommit 0917c4b49ddf29c51e7f67801901b01ec8a37d97[m
+Author: Jose Ramos <jramosch@klikealo.com>
+Date:   Sat Sep 14 19:42:54 2019 -0500
+
+    Trabajando la vista de lista de servicios
+
+[33mcommit 6dde0056ec82b7e32718b7aa8c4d5b9d8da19819[m
+Author: Jose Ramos <jarch_2092@outlook.com>
+Date:   Thu Sep 12 18:28:02 2019 -0500
+
+    Customizando menu inicial
+
+[33mcommit 1ff42bbfd85997e37440c4376dec1c369605c1f1[m
+Author: Jose Ramos <jarch_2092@outlook.com>
+Date:   Sun Sep 8 13:06:47 2019 -0500
+
+    Inicio de proyecto

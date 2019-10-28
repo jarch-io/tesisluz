@@ -17,10 +17,22 @@ class Login extends React.Component {
 
 	login() {
 		const {fetchAuth, history} = this.props;
+		const {email, password} = this.state;
 
-		fetchAuth(function () {
+		fetchAuth({
+				username : email,
+				password : password
+			},function () {
 			history.push('/dashboard');
 		}.bind(this));
+	}
+
+	handleChangeInput(evt) {
+		const {name, value}  = evt.target;
+
+		this.setState({
+			[name] : value
+		});
 	}
 
 	render() {
@@ -32,12 +44,12 @@ class Login extends React.Component {
 		            		<FormGroup>
                                 <Label for="exampleEmail">Email</Label>
                                 <Input type="email" name="email" id="exampleEmail"
-                                       placeholder="example@domain.com"/>
+                                       placeholder="example@domain.com" onChange={this.handleChangeInput.bind(this)} />
                             </FormGroup>
                             <FormGroup>
                                 <Label for="examplePassword">Password</Label>
                                 <Input type="password" name="password" id="examplePassword"
-                                       placeholder="your pasword"/>
+                                       placeholder="your pasword" onChange={this.handleChangeInput.bind(this)} />
                             </FormGroup>
                              <Button type="button" onClick={this.login.bind(this)} color="primary">Login</Button>
 		            	</Form>

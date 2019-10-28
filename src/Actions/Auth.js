@@ -10,10 +10,11 @@ export function fetchAuthPending() {
 	};
 }
 
-export function fetchAuthSuccess(user) {
+export function fetchAuthSuccess(user, token) {
 	return {
 	type: FETCH_AUTH_SUCCESS,
 	user : user,
+	token : token,
 	isAuthorize : true
 	}
 }

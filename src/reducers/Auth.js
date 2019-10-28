@@ -4,6 +4,7 @@ const initialState = {
 	pending : false,
 	user : undefined,
 	error : null,
+	token : undefined,
 	isAuthorize : false
 };
 
@@ -20,7 +21,8 @@ export function authReducer(state = initialState, action) {
 				...state,
 				pending : false,
 				user : action.user,
-				isAuthorize : true
+				isAuthorize : true,
+				token : action.token
 			}
 		case FETCH_AUTH_ERROR:
 			return {

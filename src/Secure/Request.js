@@ -1,4 +1,4 @@
-import API from './rest.js'
+import API from './rest'
 
 function getById(requestId) {
 	return API.get(`requests/${requestId}`)

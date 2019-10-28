@@ -20,6 +20,14 @@ class PrivateRoute extends React.Component {
         super(props);
     }
 
+    componentDidMount() {
+        const {fetchAuth, history} = this.props;
+        
+        fetchAuth(null, function () {
+            history.push(this.props.location);
+        }.bind(this))
+    }
+
     render() {
         const {isAuthorize} = this.props;
         return (
