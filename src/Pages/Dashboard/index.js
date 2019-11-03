@@ -7,6 +7,7 @@ import AppFooter from '../../Layout/AppFooter/';
 
 import RequestsElement from './Requests/index';
 import ServicesElement from './Services/index';
+import ReportsElement from './Reports/index';
 
 const Dashboard = ({match}) => (
     <Fragment>
@@ -17,6 +18,7 @@ const Dashboard = ({match}) => (
                 <div className="app-main__inner">
                     <Route path={`${match.path}/requests`} component={RequestsElement}/>
                     <Route path={`${match.path}/services`} component={ServicesElement}/>
+                    <Route path={`${match.path}/reports`} component={ReportsElement}/>
                 </div>
             </div>
         </div>

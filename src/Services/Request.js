@@ -24,9 +24,15 @@ function addComment(requestId, comment) {
 			.then(res => res.history);
 }
 
+function setRating(requestId, rating) {
+	return API.put(`requests/${requestId}/rating`, {rating : rating})
+				.then(res => res.data);
+}
+
 export {
 	getById,
 	create,
 	find,
-	addComment
+	addComment,
+	setRating
 };

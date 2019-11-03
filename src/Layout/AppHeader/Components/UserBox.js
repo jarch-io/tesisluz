@@ -11,6 +11,11 @@ import {
     Bounce
 } from 'react-toastify';
 
+import { connect } from 'react-redux';
+import { bindActionCreators } from 'redux';
+
+import {getUser, getAuthPending, getAuthError, getIsAuthorize} from '../../../reducers/Auth';
+import {logoutAuth as logoutAuthAction} from '../../../Fetchs/Auth';
 
 import {
     faCalendarAlt,
@@ -38,8 +43,17 @@ class UserBox extends React.Component {
         type: 'success'
     });
 
+    onLogout() {
+        const {logout} = this.props;
+
+        logout();
+    }
+
 
     render() {
+        const {isAuthorize, user} = this.props;
+
+        if(!isAuthorize) return '';
 
         return (
             <Fragment>
@@ -48,21 +62,21 @@ class UserBox extends React.Component {
                         <div className="widget-content-wrapper">
                             <div className="widget-content-left  ml-3 header-user-info">
                                 <div className="widget-heading">
-                                    Alina Mclourd
+                                    {user.person ? `${user.person.firstname} ${user.person.lastname}` : ''}
                                 </div>
                                 <div className="widget-subheading">
-                                    VP People Manager
+                                    {user.position && user.position.name}
                                 </div>
                             </div>
                             <div className="widget-content-left">
                                 <UncontrolledButtonDropdown>
                                     <DropdownToggle color="link" className="p-0">
-                                        <img width={42} className="rounded-circle" src={avatar1} alt=""/>
+                                        {/*<img width={42} className="rounded-circle" src={avatar1} alt=""/>*/}
                                         <FontAwesomeIcon className="ml-2 opacity-8" icon={faAngleDown}/>
                                     </DropdownToggle>
                                     <DropdownMenu right className="rm-pointers dropdown-menu-lg">
                                         <Nav vertical>
-                                            <NavItem className="nav-item-header">
+                                            {/**<NavItem className="nav-item-header">
                                                 Activity
                                             </NavItem>
                                             <NavItem>
@@ -87,6 +101,14 @@ class UserBox extends React.Component {
                                                     Messages
                                                     <div className="ml-auto badge badge-warning">512</div>
                                                 </NavLink>
+                                            </NavItem>*/}
+                                            <NavItem className="nav-item-header">
+                                                Cuenta
+                                            </NavItem>
+                                            <NavItem>
+                                                <NavLink href="javascript:void(0);" onClick={this.onLogout.bind(this)}>
+                                                    Logout
+                                                </NavLink>
                                             </NavItem>
                                         </Nav>
                                     </DropdownMenu>
@@ -100,4 +122,18 @@ class UserBox extends React.Component {
     }
 }
 
-export default UserBox;
+const mapStateToProps = state => ({
+    error : getAuthError(state),
+    user : getUser(state),
+    isAuthorize : getIsAuthorize(state),
+    pending : getAuthPending(state)
+});
+
+const mapDispatchToProps = dispatch => bindActionCreators({
+    logout : logoutAuthAction
+}, dispatch);
+
+export default connect(
+    mapStateToProps,
+    mapDispatchToProps
+)(UserBox);

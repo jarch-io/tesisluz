@@ -8,6 +8,7 @@ import ReactCSSTransitionGroup from 'react-addons-css-transition-group';
 import HeaderLogo from '../AppLogo';
 
 import CartBox from './CartBox';
+import Components from '../AppHeader';
 
 class Header extends React.Component {
     render() {
@@ -38,6 +39,7 @@ class Header extends React.Component {
                             {/*<SearchBox/>*/}
                         </div>
                         <div className="app-header-right">
+                            {<Components />}
                             {<CartBox />}
                         </div>
                     </div>

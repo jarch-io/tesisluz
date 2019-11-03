@@ -2,7 +2,7 @@ import React, {Fragment} from 'react';
 import {withRouter} from 'react-router-dom';
 import { Card, CardBody, Row, Col, Progress, Popover, PopoverBody, PopoverHeader, UncontrolledPopover, ListGroup, ListGroupItem, Form, FormGroup, Label, Input, Button, CustomInput } from 'reactstrap';
 
-import {getById as requestGetById, addComment as requestAddCommentPublic} from '../../../Services/Request';
+import {getById as requestGetById, setRating, addComment as requestAddCommentPublic} from '../../../Services/Request';
 import {addComment as requestAddCommentSecure} from '../../../Secure/Request';
 
 import { VerticalTimeline, VerticalTimelineElement }  from 'react-vertical-timeline-component';
@@ -25,7 +25,8 @@ class MyRequest extends React.Component {
 				services : 0,
 				offers : 0
 			},
-			cancelRequest : false
+			cancelRequest : false,
+			rating : 0
 		};
 
 		this.role = props.role;
@@ -52,7 +53,8 @@ class MyRequest extends React.Component {
 					totals : {
 						offers : totalOffer,
 						services : totalService
-					}
+					},
+					rating : request.rating
 				});
 			})
 			.catch((err) => {
@@ -76,14 +78,28 @@ class MyRequest extends React.Component {
 		});
 	}
 
+	changeRating(rating) {
+		const {request} = this.state;
+
+		setRating(request.id, rating)
+			.then(response => {
+				this.setState({
+					rating : rating
+				});
+			});
+	}
+
 	addComment() {
-		const {request, message} = this.state;
+		const {request, message, cancelRequest, rating, status} = this.state;
 		const requestAddComment = this.role == 'customer' ? requestAddCommentPublic : requestAddCommentSecure;
 
 		requestAddComment(request.id, {
 			message : message,
 			type : this.role,
-			fromId : this.role == 'customer' ? this.state.request.customer.id : this.state.request.adviser.id
+			fromId : this.role == 'customer' ? this.state.request.customer.id : this.state.request.adviser.id,
+			cancel : cancelRequest,
+			rating : rating,
+			status : status
 		})
 		.then(history => {
 			request.history = history;
@@ -100,11 +116,11 @@ class MyRequest extends React.Component {
 	setPopover(status) {
 		return (<Fragment>
 					<span id="popover">
-						{status.label} <FontAwesomeIcon icon={faQuestionCircle} />
+						{status.detail} <FontAwesomeIcon icon={faQuestionCircle} />
 					</span>
 					<UncontrolledPopover trigger="legacy" placement="bottom" target="popover">
-						<PopoverHeader>{status.label}</PopoverHeader>
-						<PopoverBody>{status.description}</PopoverBody>
+						<PopoverHeader>{status.detail}</PopoverHeader>
+						<PopoverBody>{status.detail}</PopoverBody>
 					</UncontrolledPopover>
 				</Fragment>);
 	}
@@ -144,7 +160,7 @@ class MyRequest extends React.Component {
 	renderForm() {
 		if(this.role != "customer" && this.role != "adviser") return "";
 
-		const {cancelRequest} = this.state;
+		const {cancelRequest, rating} = this.state;
 		const {request} = this.state;
 
 		if(request.isClosed) return '';
@@ -153,15 +169,15 @@ class MyRequest extends React.Component {
 			<Fragment>
 				<FormGroup>
 					<Label for="status">Status</Label>
-		          	<CustomInput type="select" id="status" name="status">
-		           		<option value="">Select</option>
-		            	<option>Value 1</option>
-		            	<option>Value 2</option>
-		            	<option>Value 3</option>
-		            	<option>Value 4</option>
-		            	<option>Value 5</option>
+		          	<CustomInput type="select" id="status" name="status" onChange={this.handleChangeInput.bind(this)}>
+		           		{request && request.progress && request.progress.length > 0 ? request.progress.map((state) => {
+		           			return <option value={state.id} selected={state.isCurrent} disabled={state.isCurrent}>{state.detail}</option>
+		           		}) : ''}
 		          	</CustomInput>
 				</FormGroup>
+				{/* <FormGroup>
+					<CustomInput type="switch" id="finishState" name="finishState" label="Deseo cerrar la solicitud." onChange={this.handleChangeInputBool.bind(this)}/>
+				</FormGroup>*/}
 			</Fragment>
 		);
 
@@ -177,14 +193,6 @@ class MyRequest extends React.Component {
 				    	<FormGroup>
           					<Input type="textarea" name="message" id="message" placeholder="Comment" onChange={this.handleChangeInput.bind(this)} />
 				    	</FormGroup>
-				    	{
-				    		cancelRequest || (this.role === 'customer' && request.isClosed) ? <FormGroup>
-					    		<Rating
-					    			emptySymbol={<FontAwesomeIcon icon={faStar} size="2x" />}
-	  								fullSymbol={<FontAwesomeIcon icon={faStar} size="2x" color="yellow"/>}
-					    		/>
-					    	</FormGroup> : ''
-				    	}
 				    	<CustomInput type="switch" id="cancelrequest" name="cancelRequest" label="Deseo cancelar la solicitud." onChange={this.handleChangeInputBool.bind(this)}/>
 				    	<Button color="primary" onClick={this.addComment.bind(this)}>Submit</Button>
 				    </Form>
@@ -192,7 +200,7 @@ class MyRequest extends React.Component {
 	}
 
 	render() {
-		const {request, totals} = this.state;
+		const {request, totals, rating} = this.state;
 
 		if(!request) {
 			return <div>Espere ...</div>;
@@ -230,12 +238,23 @@ class MyRequest extends React.Component {
                                 	</div>
                                 }
                                 {
+						    		(request.isClosed) ? <Fragment>
+						    			<Rating
+							    			emptySymbol={<FontAwesomeIcon icon={faStar} size="2x" />}
+			  								fullSymbol={<FontAwesomeIcon icon={faStar} size="2x" color="yellow"/>}
+			  								onChange={this.changeRating.bind(this)}
+			  								initialRating={rating}
+			  								readonly={this.role !== 'customer'}
+							    		/><br />
+							    	</Fragment> : ''
+						    	}
+                                {
                                 	progress.length > 0 && <div>
 	                                	<Progress multi>
 	                                		{
 	                                			progress.map((steep) => {
-									        		return <Progress bar value={progressValue} max={progressMax} color={steep.success ? 'success' : 'dark'}>
-									        				{steep.status == undefined ? steep.label : this.setPopover(steep.status)}
+									        		return <Progress bar value={progressValue} max={progressMax} color={steep.isCurrent ? 'success' : 'dark'}>
+									        				{!steep.isCurrent ? steep.detail : this.setPopover(steep)}
 									        			</Progress>
 	                                			})
 	                                		}
@@ -330,6 +349,7 @@ class MyRequest extends React.Component {
 										    icon={itemHistory.type == "customer" ? <FontAwesomeIcon icon={!isCompany ? faChild : faBuilding} className="fa-2x" /> : <img width={40} height={40} className="rounded-circle" src={request.adviser.avatar} alt=""/>}
 										  >
 										    <h3 className="vertical-timeline-element-title"></h3>
+										    {itemHistory.status ? <p><b>Estado : </b> {itemHistory.detail}</p> : ''}
 										    <p>
 										      {itemHistory.message}
 										    </p>

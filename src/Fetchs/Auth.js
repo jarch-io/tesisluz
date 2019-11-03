@@ -11,7 +11,7 @@ export function fetchAuth(user, callback) {
 
 		if(authToken && authUser) {
 			callback && callback.apply();
-			dispatch(fetchAuthSuccess(authUser, authToken));
+			dispatch(fetchAuthSuccess(JSON.parse(authUser), authToken));
 		}else{
 			login(user || {
 				username : 'none',
@@ -28,5 +28,13 @@ export function fetchAuth(user, callback) {
 				});
 		}
 
+	}
+}
+
+export function logoutAuth() {
+	return dispatch => {
+		localStorage.removeItem('AuthToken');
+		localStorage.removeItem('AuthUser');
+		window.location.href = '/#/login';
 	}
 }

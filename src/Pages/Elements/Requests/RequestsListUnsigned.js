@@ -2,8 +2,9 @@ import React, {Fragment} from 'react';
 import { withRouter } from 'react-router-dom';
 
 import {find as requestFind, assign as requestAssign} from '../../../Secure/Request';
+import {find as employeeFind} from '../../../Secure/Employee';
 
-import {Table, Media, Button}  from 'reactstrap';
+import {Table, Media, Button, Modal, ModalHeader, ModalBody, ModalFooter, Input, ListGroup, ListGroupItem}  from 'reactstrap';
 import {library} from '@fortawesome/fontawesome-svg-core';
 import {faEye} from '@fortawesome/free-solid-svg-icons';
 import {FontAwesomeIcon} from '@fortawesome/react-fontawesome';
@@ -12,7 +13,10 @@ class RequestListUnsigned extends React.Component {
 	constructor(props) {
 		super(props);
 		this.state = {
-			requests : []
+			requests : [],
+			modal : false,
+			currentRequest : null,
+			employeesList : []
 		};
 	}
 
@@ -31,30 +35,54 @@ class RequestListUnsigned extends React.Component {
 		.catch(err => {
 			alert('Error, no se pudieron cargar la lista de peticiones sin asignar.');
 		});
-		const requestsList = [
-			{
-				id : 1,
-				customer : {
-					id : 25,
-					firstName : "José",
-					lastName : "Ramos",
-					avatar : "https://icon-library.net/images/person-image-icon/person-image-icon-7.jpg"
-				},
-				status : true
-			}
-		];
 	}
 
-	selfAssingRequest(id) {
-		requestAssign(id, {
-			id : '_ME_'
+	assingRequest(idUser) {
+		const {currentRequest} = this.state;
+
+		requestAssign(currentRequest, {
+			id : idUser
 		})
 			.then(request => {
-				this.props.history.push(`./${id}/view`);
+				alert("Se asigno correctamente el asesor.");
+				this.setState({
+					currentRequest : undefined,
+					modal : false
+				});
 			})
 			.catch(err => {
 				alert('No se pudo tomar la solicitud.');
 			});
+	}
+
+	toggle() {
+		this.setState({
+			modal : !this.state.modal
+		});
+	}
+
+	openModal(id) {
+		this.setState({
+			currentRequest : id,
+			modal : true
+		});
+	}
+
+	searchEmployee(evt) {
+		const {value} = evt.target;
+
+		if(value.length < 3) return;
+
+		employeeFind({
+			search : value
+		})
+			.then(employees => {
+					this.setState({
+						employeesList : employees
+					});
+				}).catch(err => {
+					alert("No se puede buscar a los asesores");
+				});
 	}
 
 	renderItem(request) {
@@ -74,7 +102,7 @@ class RequestListUnsigned extends React.Component {
 				</td>
 				<td><div className={['badge', request.status ? 'badge-success' : 'badge-danger'].join(' ')}>{request.status ? 'Activo' : 'Inactivo'}</div></td>
 				<td><div>
-					<Button outline color="primary" size="sm" onClick={this.selfAssingRequest.bind(this, request.id)}>Tomar</Button>
+					<Button outline color="primary" size="sm" onClick={this.openModal.bind(this, request.id)}>Asignar</Button>
 				</div></td>
 			</tr>
 		);
@@ -102,6 +130,27 @@ class RequestListUnsigned extends React.Component {
 				    		}
 				    	</tbody>
 				    </Table> : <p>No hay solicitudes.</p>
+				}
+				{
+					this.state.modal ? <Modal isOpen={this.state.modal} toggle={this.toggle.bind(this)}>
+				        <ModalHeader toggle={this.toggle.bind(this)}>Gracias por su solicitud!</ModalHeader>
+				        <ModalBody>
+				        	<div>
+				        		<Input name="search" placeholder="Nombre del empleado" onChange={this.searchEmployee.bind(this)}/>
+				        		<br/>
+				        		<ListGroup>
+				        			{
+				        				this.state.employeesList.length == 0 ? '' : this.state.employeesList.map((employee) => {
+							        		return <ListGroupItem><Button onClick={this.assingRequest.bind(this, employee.id_employee)}>Asignar</Button> {employee.firstname} {employee.lastname}</ListGroupItem>
+				        				})
+				        			}
+							    </ListGroup>
+				        	</div>
+				        </ModalBody>
+				        <ModalFooter>
+				          <Button color="secondary" onClick={this.toggle.bind(this)}>Cancel</Button>
+				        </ModalFooter>
+  					</Modal> : ''
 				}
 			</Fragment>
 			);
