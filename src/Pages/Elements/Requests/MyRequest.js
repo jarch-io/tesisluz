@@ -274,7 +274,7 @@ class MyRequest extends React.Component {
 						<Col sm="6">
 							<Row>
 								{
-									services.length > 0 && <Col sm="6">
+									services.length > 0 && <Col sm="12">
 										<div className="widget-chart">
 			                                <div className="widget-chart-content">
 			                                    <div className="icon-wrapper rounded-circle">
@@ -291,7 +291,7 @@ class MyRequest extends React.Component {
 			                                        {
 			                                        	services.map((service) => {
 			                                        		return (<ListGroupItem tag="li">
-			                                        				{preferenceStore.currency.symbol} {service.price - service.discount} - {service.title}
+			                                        				{preferenceStore.currency.symbol} {(service.price - service.discount).toFixed(2)} - {service.title}
 			                                        			</ListGroupItem>);
 			                                        	})
 			                                        }

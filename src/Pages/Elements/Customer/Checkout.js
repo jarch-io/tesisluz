@@ -136,7 +136,7 @@ class Checkout extends React.Component {
 
 		return (<Fragment>
 					<Row>
-						<Col sm="8">
+						<Col sm="7">
 							<Card>
 								<CardHeader tag="h3">
 									<Col md={6}>
@@ -263,7 +263,7 @@ class Checkout extends React.Component {
 								</CardBody>
 							</Card>
 						</Col>
-						<Col sm="4">
+						<Col sm="5">
 							<Card>
 								<CardHeader tag="h3">
 									Detalle de la solicitud
@@ -273,7 +273,7 @@ class Checkout extends React.Component {
                                         Continuar agregando
                                     </Button>
                                     <Button block color="dark" disabled={!this.state.acceptTerms} onClick={this.createRequest.bind(this)}>
-                                        Solicitar Ahora S/ {total}
+                                        Solicitar Ahora S/ {total.toFixed(2)}
                                     </Button>
 									<Nav vertical>
 		                                {
@@ -283,7 +283,7 @@ class Checkout extends React.Component {
 		                                                <NavLink>
 		                                                    <img width={100} className="" src={service.image}/>
 		                                                    {service.title}
-		                                                    <div className="ml-auto badge badge-pill badge-info">{service.price}</div>
+		                                                    <div className="ml-auto badge badge-pill badge-info">S/ {service.price.toFixed(2)}</div>
 		                                                </NavLink>
 		                                            </NavItem>
 		                                            );

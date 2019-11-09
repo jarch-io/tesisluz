@@ -6,7 +6,7 @@ import { bindActionCreators } from 'redux';
 
 import {injector} from 'react-services-injector';
 
-import {Row, Col, Form, FormGroup, Label, Button, Card, CardBody, CardTitle, CardText, CardLink, CardImg, CardSubtitle} from 'reactstrap';
+import {Row, Col, Form, FormGroup, Label, Button, Card, CardBody, CardTitle, CardText, CardLink, CardImg, CardSubtitle, Modal, ModalHeader, ModalBody, ModalFooter, TabContent, TabPane, Nav, NavItem, NavLink, CardHeader, ListGroup, ListGroupItem, ListGroupItemHeading, ListGroupItemText} from 'reactstrap';
 
 import {list as serviceList} from '../../../Services/Service';
 
@@ -20,7 +20,10 @@ class ListServices extends React.Component {
 		this.state = {
 			services : [],
 			selected : undefined,
-			messageError : ""
+			messageError : "",
+			modal : false,
+			toggle : false,
+			tabActive : 2
 		};
 	}
 
@@ -49,54 +52,43 @@ class ListServices extends React.Component {
 		addToCart(serviceId);
 	}
 
+	toggle() {
+		this.setState({
+			toggle : !this.state.toggle,
+			modal : !this.state.modal
+		});
+	}
+
+	selectedServiceAction(service) {
+		this.setState({
+			toggle : true,
+			modal : true,
+			selected : service
+		});
+	}
+
+	toggleTab(tab) {
+		this.setState({
+			tabActive : tab
+		})
+	}
+
 	render() {
-		const {services, selected, messageError} = this.state;
-
-		const selectedService = () => {
-			if(!selected) return (
-				<span>{messageError}</span>
-			);
-
-			const {cart} = this.props;
-			let servicesInCart = [];
-
-			if(cart) {
-				cart.items.map((service) => {
-					servicesInCart.push(service.service);
-				});
-			}
-
-			return (
-				<Col sm="4">
-					<Card body outline color="primary">
-						<CardImg top width="100%" src={selected.images} />
-						<CardBody>
-							<CardTitle>{selected.title}</CardTitle>
-							<CardSubtitle>{selected.price}</CardSubtitle>
-							{
-								servicesInCart.indexOf(parseInt(selected.id)) !== -1 ? '' : <CardLink href="#" onClick={this.addToCart.bind(this, selected.id)}>Agregar</CardLink>
-							}
-							<CardText>{selected.description}</CardText>
-						</CardBody>
-					</Card>
-				</Col>
-			);
-		}
+		const {services, selected, messageError, modal, tabActive} = this.state;
 
 		return (<Fragment>
 					<Row>
-						<Col sm={selected ? 8 : 12}>
+						<Col sm={12}>
 							<Row>
 							{
 								services.map((service, i) => {
-									if(selected && selected.id === service.id) return "";
 									return (
-										<Col sm={selected ? 6 : 4}>
+										<Col sm={4}>
 											<Card>
 												<CardImg top width="100%" src={service.images} />
 												<CardBody>
 													<CardTitle>{service.title}</CardTitle>
-													<Button onClick={() => {this.setState({selected : service})}}>Detalle</Button>
+													<Button onClick={this.selectedServiceAction.bind(this, service)}>Detalle</Button>
 												</CardBody>
 											</Card>
 										</Col>
@@ -105,8 +97,89 @@ class ListServices extends React.Component {
 							}
 							</Row>
 						</Col>
-						{selectedService()}
 					</Row>
+					<div>
+				      <Modal isOpen={modal} toggle={this.toggle.bind(this)}>
+				        <ModalHeader toggle={this.toggle.bind(this)}>{selected && selected.title}</ModalHeader>
+				        <ModalBody>
+				        	<CardImg top width="100%" src={selected && selected.images} />
+				        	{
+				        		selected && selected.type == 'simple' ? 
+				        			<div>
+				        				<ListGroup>
+									    	<ListGroupItem>
+									    		<Row>
+									    			<Col xs={6}><b>S/ {selected.price}</b></Col>
+									    			<Col xs={6}><Button color="success" onClick={this.addToCart.bind(this, selected.id)} className="rigth">Adquirir</Button></Col>
+									    		</Row>
+									    	</ListGroupItem>
+									    	<ListGroupItem>
+				        						<p>{selected.description}</p>
+									    	</ListGroupItem>
+									    </ListGroup>
+				        			</div>
+				        		 : 
+						        	<Card tabs="true" className="mb-3">
+		                				<CardHeader>
+							        		<Nav justified>
+						                        <NavItem>
+						                            <NavLink
+						                                className={classnames({active: tabActive === 1})}
+						                                onClick={this.toggleTab.bind(this, 1)}
+						                            >
+						                                Descripcion
+						                            </NavLink>
+						                        </NavItem>
+						                        <NavItem>
+						                            <NavLink
+						                                className={classnames({active: tabActive === 2})}
+						                                onClick={this.toggleTab.bind(this, 2)}
+						                            >
+						                                Planes
+						                            </NavLink>
+						                        </NavItem>
+						                    </Nav>
+						                </CardHeader>
+						                <CardBody>
+								        	<TabContent activeTab={tabActive}>
+									        	<TabPane tabId={2}>
+									        		{
+									        			selected ? (selected.type == 'configurable' ? 
+									        				<ListGroup>
+									        					{selected.planes.map((plan) => {
+														      		return (
+														      			<ListGroupItem>
+														      				<ListGroupItemHeading>{plan.title}</ListGroupItemHeading>
+														      				<ListGroupItemText>
+														      					<Row>
+														      						<Col xs="6"><b>S/ {plan.price}</b></Col>
+														      						<Col xs="6"><Button color="success" onClick={this.addToCart.bind(this, plan.id)} className="rigth">Adquirir</Button></Col>
+														      					</Row>
+														      					<p>{plan.description}</p>
+														      				</ListGroupItemText>
+														      			</ListGroupItem>
+														      		);
+									        					})}
+														    </ListGroup> : 
+									        				<ListGroup>
+														      <ListGroupItem>S/ {selected.price}</ListGroupItem>
+														    </ListGroup>
+									        		) : ''
+									        		}
+							                    </TabPane>
+								        		<TabPane tabId={1}>
+								        			<p>{selected && selected.description}</p>
+						                        </TabPane>
+								        	</TabContent>
+								        </CardBody>
+								    </Card>
+				        	}
+				        </ModalBody>
+				        <ModalFooter>
+				          <Button color="secondary" onClick={this.toggle.bind(this)}>Cancel</Button>
+				        </ModalFooter>
+				      </Modal>
+				    </div>
 				</Fragment>);
 	}
 }
