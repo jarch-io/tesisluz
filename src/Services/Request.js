@@ -7,7 +7,11 @@ function getById(requestId) {
 }
 
 function find(terms) {
-	return API.get(`requests`, terms)
+	return API.get(`requests`, {
+		params : {
+			query : terms
+		}
+	})
 			.then(res => res.data)
 			.then(res => res.request);
 }

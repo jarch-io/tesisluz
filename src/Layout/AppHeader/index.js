@@ -13,10 +13,8 @@ class Header extends React.Component {
         } = this.props;
         return (
             <Fragment>
-                <div className="app-header-left">
-                    {/*<SearchBox/>*/}
-                </div>
                 <div className="app-header-right">
+                    <SearchBox/>
                     <UserBox/>
                 </div>
             </Fragment>

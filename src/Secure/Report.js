@@ -10,6 +10,17 @@ function getHistoryStatus(params) {
 			.then(res => res.data);
 }
 
+function getRequestHistory(params) {
+	return API.get(`reports/tracker/requests`, {
+		params : {
+			query : params
+		}
+	})
+			.then(res => res && res.data ? res.data : "")
+			.then(res => res && res.data ? res.data : "");
+}
+
 export {
-	getHistoryStatus
+	getHistoryStatus,
+	getRequestHistory
 };

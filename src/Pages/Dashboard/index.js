@@ -1,7 +1,6 @@
 import React, {Fragment} from 'react';
 import {Route, BrowserRouter as Router} from 'react-router-dom';
 
-import AppHeader from '../../Layout/AppHeader/';
 import AppSidebar from '../../Layout/AppSidebar/';
 import AppFooter from '../../Layout/AppFooter/';
 
@@ -11,7 +10,6 @@ import ReportsElement from './Reports/index';
 
 const Dashboard = ({match}) => (
     <Fragment>
-        <AppHeader/>
         <div className="app-main">
             <AppSidebar/>
             <div className="app-main__outer">

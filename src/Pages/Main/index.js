@@ -20,13 +20,17 @@ class Main extends React.Component {
     componentWillMount() {
         let sessionKey = sessionStorage.getItem('session_key_app');
 
+        let isUserRoute = window.location.pathname.indexOf('dashboard') == -1;
+
         if(!sessionKey) {
           sessionStorage.setItem('session_key_app', Date.now() + '_' + this.makeid(10));
         }
 
-        registerTracker({
-            pageKey : "app"
-        });
+        if(isUserRoute) {
+            registerTracker({
+                pageKey : "app"
+            });
+        }
     }
 
     componentWillUnmount() {

@@ -2,7 +2,7 @@ import React, {Fragment} from 'react';
 
 import ReactHighcharts from 'react-highcharts';
 
-import {getHistoryStatus} from '../../../Secure/Report';
+import {getHistoryStatus, getRequestHistory} from '../../../Secure/Report';
 
 class Overview extends React.Component {
 	constructor(props) {
@@ -10,12 +10,14 @@ class Overview extends React.Component {
 
 		this.state = {
 			categories : [],
-			series : []
+			series : [],
+			categoriesTrack : [],
+			seriesTrack : []
 		};
 	}
 
 	afterRender(chart) {
-		console.log(chart);
+		
 	}
 
 	componentDidMount() {
@@ -27,10 +29,19 @@ class Overview extends React.Component {
 					});
 				});
 
+		getRequestHistory()
+				.then((data) => {
+					if(data) {
+						this.setState({
+							categoriesTrack: data.categories,
+							seriesTrack : data.series
+						});
+					}
+				});
 	}
 
 	render() {
-		const {categories, series} = this.state;
+		const {categories, series, categoriesTrack, seriesTrack} = this.state;
 
 		const config = {
 			title: {
@@ -46,7 +57,30 @@ class Overview extends React.Component {
 			series: series
 		};
 
-		return (<ReactHighcharts config={config} callback={this.afterRender.bind(this)}></ReactHighcharts>);
+		const configTrack = {
+			title: {
+		        text: 'Navegacion'
+		    },
+		     tooltip: {
+		        shared: true,
+		        crosshairs: true
+		    },
+			xAxis: {
+			    categories: categoriesTrack
+			},
+			series: seriesTrack
+		};
+
+		return (
+			<Fragment>
+				{
+					categoriesTrack.length == 0 ? '' : <ReactHighcharts config={configTrack}></ReactHighcharts>
+				}
+				{
+					categories.length == 0 ? '' : <ReactHighcharts config={config}></ReactHighcharts>
+				}
+			</Fragment>
+		);
 	}
 }
 
