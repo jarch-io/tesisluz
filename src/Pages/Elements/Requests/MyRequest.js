@@ -4,6 +4,7 @@ import { Card, CardBody, Row, Col, Progress, Popover, PopoverBody, PopoverHeader
 
 import {getById as requestGetById, setRating, addComment as requestAddCommentPublic} from '../../../Services/Request';
 import {addComment as requestAddCommentSecure} from '../../../Secure/Request';
+import {register as registerTracker} from '../../../Services/Tracker';
 
 import { VerticalTimeline, VerticalTimelineElement }  from 'react-vertical-timeline-component';
 import 'react-vertical-timeline-component/style.min.css';
@@ -35,6 +36,8 @@ class MyRequest extends React.Component {
 	componentDidMount() {
 		const {match: {params}} = this.props;
 
+		let isUserRoute = window.location.pathname.indexOf('dashboard') == -1;
+		
 		requestGetById(parseInt(params.id))
 			.then((request) => {
 				let totalOffer = 0;
@@ -56,6 +59,13 @@ class MyRequest extends React.Component {
 					},
 					rating : request.rating
 				});
+
+				if(isUserRoute) {
+					registerTracker({
+						pageKey : 'userViewRequest',
+						requestId : request.id
+					});
+				}
 			})
 			.catch((err) => {
 				alert('ocurrio un error :(');

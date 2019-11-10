@@ -7,13 +7,40 @@ import ResizeDetector from 'react-resize-detector';
 
 import AppMain from '../../Layout/AppMain';
 
+import {register as registerTracker} from '../../Services/Tracker';
+
 class Main extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
             closedSmallerSidebar: false
         };
+    }
 
+    componentWillMount() {
+        let sessionKey = sessionStorage.getItem('session_key_app');
+
+        if(!sessionKey) {
+          sessionStorage.setItem('session_key_app', Date.now() + '_' + this.makeid(10));
+        }
+
+        registerTracker({
+            pageKey : "app"
+        });
+    }
+
+    componentWillUnmount() {
+        sessionStorage.clear();
+    }
+
+    makeid(length) {
+       var result           = '';
+       var characters       = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+       var charactersLength = characters.length;
+       for ( var i = 0; i < length; i++ ) {
+          result += characters.charAt(Math.floor(Math.random() * charactersLength));
+       }
+       return result;
     }
 
     render() {

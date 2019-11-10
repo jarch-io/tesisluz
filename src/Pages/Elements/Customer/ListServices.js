@@ -9,6 +9,7 @@ import {injector} from 'react-services-injector';
 import {Row, Col, Form, FormGroup, Label, Button, Card, CardBody, CardTitle, CardText, CardLink, CardImg, CardSubtitle, Modal, ModalHeader, ModalBody, ModalFooter, TabContent, TabPane, Nav, NavItem, NavLink, CardHeader, ListGroup, ListGroupItem, ListGroupItemHeading, ListGroupItemText} from 'reactstrap';
 
 import {list as serviceList} from '../../../Services/Service';
+import {register as registerTracker} from '../../../Services/Tracker';
 
 import {addToCart as addCartAction} from '../../../Fetchs/Cart';
 import {getCart, getCartError, getCartPending} from '../../../reducers/Cart';
@@ -39,6 +40,10 @@ class ListServices extends React.Component {
 
 				this.setState({
 					services : services
+				});
+
+				registerTracker({
+					pageKey : 'servicesList'
 				});
 			})
 			.catch(err => {

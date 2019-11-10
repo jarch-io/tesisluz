@@ -44,7 +44,7 @@ class CartBox extends React.Component {
     }
 
     goToCheckout() {
-        this.props.history.push('checkout');
+        this.props.history.push('/checkout');
     }
 
     goToHome() {

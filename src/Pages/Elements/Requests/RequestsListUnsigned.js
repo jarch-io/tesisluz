@@ -45,6 +45,7 @@ class RequestListUnsigned extends React.Component {
 		})
 			.then(request => {
 				alert("Se asigno correctamente el asesor.");
+				this.deleteRequest(currentRequest);
 				this.setState({
 					currentRequest : undefined,
 					modal : false
@@ -53,6 +54,21 @@ class RequestListUnsigned extends React.Component {
 			.catch(err => {
 				alert('No se pudo tomar la solicitud.');
 			});
+	}
+
+	deleteRequest(currentRequest) {
+		const {requests} = this.state;
+		let myIndex = -1;
+
+		requests.map((request, index) => {
+			if(request.id === currentRequest.id) myIndex = index;
+		});
+
+		requests.splice(myIndex, 1);
+
+		if(myIndex != -1) this.setState({
+			requests : requests
+		});
 	}
 
 	toggle() {

@@ -9,6 +9,8 @@ import {getCart, getCartError, getCartPending, clearCart} from '../../../reducer
 
 import {create as requestCreate} from '../../../Services/Request';
 
+import {register as registerTracker} from '../../../Services/Tracker';
+
 import {Row, Col, Form, FormGroup, Label, Input, Button, Nav, NavItem, NavLink, Card, CardHeader, CardBody, cardFooter, CustomInput, Modal, ModalHeader, ModalBody, ModalFooter} from 'reactstrap';
 
 class Checkout extends React.Component {
@@ -19,6 +21,12 @@ class Checkout extends React.Component {
 			isCompany : false,
 			modal : false
 		};
+	}
+
+	componentDidMount() {
+		registerTracker({
+			pageKey : 'checkout'
+		});
 	}
 
 	listServices() {
@@ -76,6 +84,11 @@ class Checkout extends React.Component {
 			const {clearCart} = this.props;
 
 			clearCart();
+
+			registerTracker({
+				pageKey : 'createRequest',
+				requestId : request.id
+			});
 
 			this.setState({
 				request : request

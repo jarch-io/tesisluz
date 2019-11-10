@@ -13,7 +13,7 @@ function find(terms) {
 }
 
 function create(request) {
-	return API.post(`requests`, JSON.stringify({request : request}))
+	return API.post(`requests`, {request : request})
 			.then(res => res.data)
 			.then(res => res.request);
 }

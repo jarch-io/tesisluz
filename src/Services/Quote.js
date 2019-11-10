@@ -7,13 +7,13 @@ function getById(quoteId) {
 }
 
 function create(items) {
-	return API.post(`quotes`, JSON.stringify({items : items}))
+	return API.post(`quotes`, {items : items})
 			.then(res => res.data)
 			.then(res => res.quote);
 }
 
 function update(quoteId, items) {
-	return API.put(`quotes/${quoteId}`, JSON.stringify({items : items}))
+	return API.put(`quotes/${quoteId}`, {items : items})
 			.then(res => res.data)
 			.then(res => res.quote);
 }
